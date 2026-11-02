@@ -1,0 +1,50 @@
+COMANDOS
+=====================
+
+PowerShell script fix
+
+cd "C:\Users\keilor.castillo\Documents\Proyectos\Glosario de Seguros\dev-no-url"
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+
+====================
+
+Requisito: Node.js 20 o superior y npm.
+
+1. Instalar dependencias
+   npm install
+
+2. Iniciar el servidor de desarrollo
+   npm run dev
+
+3. Abrir la URL local que muestra Vite (normalmente http://localhost:5173)
+
+4. Crear una compilacion de produccion
+   npm run build
+
+5. Previsualizar la compilacion de produccion
+   npm run preview
+
+AZURE STATIC WEB APPS
+=====================
+
+Configuracion recomendada para GitHub Actions:
+- App location: /
+- API location: dejar vacio
+- Output location: dist
+- Build command: npm run build
+
+El archivo public/staticwebapp.config.json se conserva para Azure, aunque este
+modo no necesita fallback para rutas internas porque la URL no cambia.
+
+Para desplegar desde Azure Portal:
+1. Crear un recurso Static Web App.
+2. Elegir el proveedor GitHub y el repositorio.
+3. Seleccionar la rama de produccion.
+4. Usar estas rutas: App location /, API location vacio, Output location dist.
+5. Azure generara el workflow de GitHub Actions para cada push.
+
+Comprobacion local antes de publicar:
+   npm ci
+   npm run build
+
