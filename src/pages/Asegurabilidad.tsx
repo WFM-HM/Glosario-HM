@@ -4,7 +4,7 @@ import type { Asegurabilidad as AsegurabilidadType, Page } from '../data/types'
 import {
     deduplicateAsegurabilidades,
     filterAsegurabilidades
-} from '../../../../shared/asegur/catalog'
+} from '../asegur/catalog'
 import { emptyData } from '../shared_utils'
 
 type HomeProps = {

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Modal from './modal'
 import SwitchComponent from './switch'
 import type { ChequeoMedico, Data, ServicioItem } from '../data/types'
-import { getAgeRangeLabel, getCheckupRelations } from '../../../../shared/checkups/catalog'
+import { getAgeRangeLabel, getCheckupRelations } from '../checkups/catalog'
 import { formatPrice } from '../shared_utils'
 
 export type CheckupModalProps = {

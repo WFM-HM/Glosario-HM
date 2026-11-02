@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useData } from '../context/DataContext'
 import type { Preempleo, Page } from '../data/types'
-import { filterPreempleos } from '../../../../shared/preempleos/catalog'
+import { filterPreempleos } from '../preempleos/catalog'
 import { emptyData } from '../shared_utils'
 
 type HomeProps = {

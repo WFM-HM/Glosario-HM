@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useData } from '../context/DataContext'
 import type { Preempleo, Page, ChequeoMedico } from '../data/types'
 import CheckupModal from '../components/CheckupModal'
-import { getPreempleoRelations } from '../../../../shared/preempleos/catalog'
-import { getAgeRangeLabel, getCheckupRelations } from '../../../../shared/checkups/catalog'
+import { getPreempleoRelations } from '../preempleos/catalog'
+import { getAgeRangeLabel, getCheckupRelations } from '../checkups/catalog'
 
 import { formatPrice, emptyData } from '../shared_utils'
 

@@ -8,7 +8,7 @@ import Asegurabilidad from './pages/Asegurabilidad'
 import Asegurabilidad_info from './pages/Asegurabilidad_info'
 import Preempleo from './pages/Preempleo'
 import Preempleo_info from './pages/Preempleo_info'
-import { emptyData } from '../../../shared/shared_utils'
+import { emptyData } from './shared_utils'
 import { useData } from './context/DataContext'
 
 function App() {

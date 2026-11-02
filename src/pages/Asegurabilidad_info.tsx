@@ -8,7 +8,7 @@ import {
   deduplicatePaquetes,
   sortCatalog,
   getPriceOptions
-} from '../../../../shared/asegur/catalog'
+} from '../asegur/catalog'
 import { formatPrice, emptyData } from '../shared_utils'
 
 type HomeProps = {

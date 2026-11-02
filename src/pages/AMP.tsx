@@ -5,7 +5,7 @@ import {
     deduplicateAmps,
     filterAmps,
     getAmpRelations
-} from '../../../../shared/amps/catalog'
+} from '../amps/catalog'
 import { emptyData } from '../shared_utils'
 
 type HomeProps = {

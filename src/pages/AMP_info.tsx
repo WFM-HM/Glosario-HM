@@ -4,7 +4,7 @@ import SwitchComponent from '../components/switch'
 import type { AMP, AMP as AmpType, Page } from '../data/types'
 import {
     getAmpRelations
-} from '../../../../shared/amps/catalog'
+} from '../amps/catalog'
 import { emptyData } from '../shared_utils'
 
 type HomeProps = {

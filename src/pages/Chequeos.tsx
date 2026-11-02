@@ -9,7 +9,7 @@ import {
   getUniqueNames,
   getCheckupRelations,
   getPriceOptions
-} from '../../../../shared/checkups/catalog'
+} from '../checkups/catalog'
 import { formatPrice, emptyData } from '../shared_utils'
 
 type CheckupRowProps = {
