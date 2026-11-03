@@ -35,7 +35,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
             }
 
             fetch(
-                'https://gist.githubusercontent.com/WFM-HM/e36c709361fee3b2739f64ff969ec6c0/raw/49d17094c1075220bd736971fe5f99dc5e29c188/data',
+                'https://gist.githubusercontent.com/WFM-HM/e36c709361fee3b2739f64ff969ec6c0/raw',
                 { cache: 'no-store' }
             )
                 .then(async (response) => {
