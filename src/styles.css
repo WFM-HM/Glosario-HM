@@ -1702,6 +1702,11 @@ h2 {
 .amp-detail-context {
   min-width: 0;
   border-top: 3px solid var(--ink);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  background: var(--white);
+  padding: 0 17px 20px;
 }
 
 .amp-detail-context__heading {
@@ -1725,6 +1730,10 @@ h2 {
 .amp-detail-section-title {
   font-size: 10px !important;
   font-weight: bolder !important;
+}
+
+.amp-exclusions-button {
+  padding: 0;
 }
 
 .glossary-sidebar {
@@ -2123,7 +2132,6 @@ h2 {
 .amp-diagnosis-panel {
   min-width: 0;
   border-top: 3px solid var(--red);
-  background: var(--white);
 }
 
 .amp-diagnosis-panel__header {
@@ -2161,14 +2169,19 @@ h2 {
 
 .amp-diagnosis {
   display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
+  cursor: pointer;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 140px;
+}
+
+.amp-diagnosis__main {
+  display: flex;
+  align-items: flex-start;
   gap: 14px;
-  padding: 18px;
-  background: var(--paper);
-  border-top: 1px solid var(--line);
 }
 
 .amp-diagnosis__number {
+  align-self: start;
   color: var(--red);
   font: 700 12px/1.2 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
   letter-spacing: .08em;
@@ -2185,6 +2198,48 @@ h2 {
   margin: 0;
   color: var(--muted);
   font: 12px/1.45 Arial, sans-serif;
+}
+
+.amp-diagnosis:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
+
+.diagnosis-modal__coverage {
+  margin-top: 16px;
+}
+
+.diagnosis-modal__categories {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.diagnosis-modal__category {
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.diagnosis-modal__category h4 {
+  margin: 0 0 10px;
+  color: var(--ink);
+  font: 700 11px/1.3 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.checkup-modal__empty {
+  color: var(--muted);
+}
+
+.amp-diagnosis-panel.glossary-results .amp-diagnoses {
+  display: block;
+  height: calc(100vh - 330px);
+  max-height: calc(100vh - 330px);
+  overflow-y: auto;
+  padding: 0 10px 4px 0;
+  scrollbar-color: var(--red) var(--paper);
+  scrollbar-width: thin;
 }
 
 .amp-coverage-groups {
@@ -2273,6 +2328,8 @@ h2 {
 
   .amp-detail-context {
     margin-bottom: 30px;
+    padding-right: 12px;
+    padding-left: 12px;
   }
 
   .amp-diagnoses {
@@ -2287,9 +2344,13 @@ h2 {
   }
 
   .amp-diagnosis {
-    grid-template-columns: 26px minmax(0, 1fr);
-    gap: 10px;
     padding: 16px 12px;
+  }
+
+  .amp-diagnosis-panel.glossary-results .amp-diagnoses {
+    height: calc(100vh - 500px);
+    max-height: none;
+    overflow-y: auto;
   }
 
   .glossary-workspace {
@@ -2314,12 +2375,6 @@ h2 {
 
   .glossary-results .results-header {
     min-height: 50px;
-  }
-
-  .amp-diagnoses {
-    max-height: none;
-    overflow-y: visible;
-    padding-right: 0;
   }
 
   .results-header__sort {
