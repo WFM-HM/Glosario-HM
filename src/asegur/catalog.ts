@@ -1,4 +1,4 @@
-import type { CatalogItem, PricedCatalogReference, Asegurabilidad, Data, PaqueteAsegurabilidad } from '../data/types'
+import type { CatalogItem, Asegurabilidad, PaqueteAsegurabilidad } from '../data/types'
 
 export type AsegurabilidadFilters = {
   search: string
@@ -54,18 +54,6 @@ export function getPriceOptions(paquetes: PaqueteAsegurabilidad[]): PriceOption[
       ? left.currency.localeCompare(right.currency, 'es', { sensitivity: 'base' })
       : left.price - right.price
   )
-}
-
-export function deduplicateAsegurabilidades(asegurs: Asegurabilidad[]) {
-  const seen = new Set<string>()
-
-  return asegurs.filter((asegur) => {
-    const key = JSON.stringify(asegur)
-
-    if (seen.has(key)) return false
-    seen.add(key)
-    return true
-  })
 }
 
 export function filterAsegurabilidades(asegurs: Asegurabilidad[], filters: AsegurabilidadFilters) {

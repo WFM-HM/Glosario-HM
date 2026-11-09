@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { useData } from '../context/DataContext'
 import type { Asegurabilidad as AsegurabilidadType, Page } from '../data/types'
 import {
-    deduplicateAsegurabilidades,
     filterAsegurabilidades
 } from '../asegur/catalog'
 import { emptyData } from '../shared_utils'
@@ -16,7 +15,7 @@ function Asegurabilidad({ onNavigate }: HomeProps) {
     const { decryptedData } = useData()
     const data = decryptedData ?? emptyData
     
-    const Asegurabilidades = useMemo(() => deduplicateAsegurabilidades(data.Asegurabilidad), [data.Asegurabilidad])
+    const Asegurabilidades = useMemo(() => data.Asegurabilidad, [data.Asegurabilidad])
     const filteredAsegurabilidades = useMemo(
         () => filterAsegurabilidades(Asegurabilidades, { search }).sort((left, right) =>
             left.Nombre.localeCompare(right.Nombre, 'es', { sensitivity: 'base' })),

@@ -63,26 +63,15 @@ export function getAmpRelations(amp: AMP, data: Data) {
     sedes: resolveCatalogNames(locationLookup, amp.Sedes),
     diagnoses: amp.Diagnosticos.map((diagnosis) => ({
       ...diagnosis,
-      coverageGroups: Array.from(
-        diagnosis.Cobertura.reduce((groups, coverage) => {
-          const categoryName = categoryLookup.get(coverage.cat_f_id) ?? 'Sin categoría'
-          const group = groups.get(coverage.cat_f_id) ?? {
-            categoryName,
-            coverages: [],
-          }
-
-          group.coverages.push({
-            serviceId: coverage.serv_f_id,
-            name: serviceLookup.get(coverage.serv_f_id) ?? `Servicio ${coverage.serv_f_id}`,
-            detail: coverage.Detalle,
-          })
-          groups.set(coverage.cat_f_id, group)
-          return groups
-        }, new Map<number, {
-          categoryName: string
-          coverages: Array<{ serviceId: number; name: string; detail?: string }>
-        }>()).values()
-      ),
+      coverageGroups: diagnosis.Cobertura.map((coverage) => ({
+        categoryName: categoryLookup.get(coverage.cat_f_id) ?? 'Sin categoría',
+        rules: coverage.Reglas,
+        coverages: coverage.Servicios.map((service) => ({
+          serviceId: service.f_serv_id,
+          name: serviceLookup.get(service.f_serv_id) ?? `Servicio ${service.f_serv_id}`,
+          detail: service.Detalle,
+        })),
+      })),
     })),
   }
 }

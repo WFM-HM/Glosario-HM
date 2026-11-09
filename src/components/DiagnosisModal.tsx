@@ -40,6 +40,12 @@ function DiagnosisModal({ diagnosis, data, isOpen, onClose }: DiagnosisModalProp
       >
         {diagnosis && (
           <div className="checkup-modal">
+            {diagnosis.Nota != "" &&
+              <div className="checkup-modal__section" style={{ paddingTop: "0px" }}>
+                <h3>Nota</h3>
+                <p>{diagnosis.Nota}</p>
+              </div>
+            }
             <div className="checkup-modal__section">
               <h3>Síntomas</h3>
               {diagnosis.Sintomas.length > 0 ? (
@@ -64,41 +70,53 @@ function DiagnosisModal({ diagnosis, data, isOpen, onClose }: DiagnosisModalProp
                 />
 
                 <div className="diagnosis-modal__categories">
-                  {diagnosis.coverageGroups.map((group) => (
-                    <section key={group.categoryName} className="diagnosis-modal__category">
+                  {diagnosis.coverageGroups.map((group, groupIndex) => (
+                    <section key={`${group.categoryName}-${groupIndex}`} className="diagnosis-modal__category">
                       <h4>{group.categoryName}</h4>
-                      <ul className="checkup-tags">
-                        {group.coverages.map((coverage, index) => {
-                          const service = data.Servicios.find((item) => item.id === coverage.serviceId)
-                          const hasDocs = Boolean(service?.Docs.length)
+                      {group.rules.length > 0 && (
+                        <div className="diagnosis-modal__rules">
+                          <span className="diagnosis-modal__rules-label">Condiciones de cobertura</span>
+                          <ul>
+                            {group.rules.map((rule, index) => (
+                              <li key={`${rule}-${index}`}>{rule}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {group.coverages.length > 0 && (
+                        <ul className="checkup-tags">
+                          {group.coverages.map((coverage, index) => {
+                            const service = data.Servicios.find((item) => item.id === coverage.serviceId)
+                            const hasDocs = Boolean(service?.Docs.length)
 
-                          return (
-                            <li key={`${coverage.serviceId}-${index}`}>
-                              <button
-                                type="button"
-                                className={hasDocs ? 'service-tag service-tag--available' : 'service-tag service-tag--unavailable'}
-                                onClick={() => serviceClicked(coverage.serviceId)}
-                                title={hasDocs ? 'Ver documentos disponibles' : 'No hay documentos disponibles'}
-                              >
-                                {coverage.name}
-                                {coverage.detail && <span className="service-tag__detail"> — {coverage.detail}</span>}
-                                <span className="service-tag__icon" aria-hidden="true">{hasDocs ? '↗' : ''}</span>
-                              </button>
-
-                              {visibleSKU && service?.SKU && (
+                            return (
+                              <li key={`${coverage.serviceId}-${index}`}>
                                 <button
                                   type="button"
-                                  className="service-tag__sku"
-                                  onClick={() => navigator.clipboard.writeText(service.SKU)}
-                                  title="Copiar SKU"
+                                  className={hasDocs ? 'service-tag service-tag--available' : 'service-tag service-tag--unavailable'}
+                                  onClick={() => serviceClicked(coverage.serviceId)}
+                                  title={hasDocs ? 'Ver documentos disponibles' : 'No hay documentos disponibles'}
                                 >
-                                  SKU: {service.SKU}
+                                  {coverage.name}
+                                  {coverage.detail && <span className="service-tag__detail"> — {coverage.detail}</span>}
+                                  <span className="service-tag__icon" aria-hidden="true">{hasDocs ? '↗' : ''}</span>
                                 </button>
-                              )}
-                            </li>
-                          )
-                        })}
-                      </ul>
+
+                                {visibleSKU && service?.SKU && (
+                                  <button
+                                    type="button"
+                                    className="service-tag__sku"
+                                    onClick={() => navigator.clipboard.writeText(service.SKU)}
+                                    title="Copiar SKU"
+                                  >
+                                    SKU: {service.SKU}
+                                  </button>
+                                )}
+                              </li>
+                            )
+                          })}
+                        </ul>
+                      )}
                     </section>
                   ))}
                 </div>
