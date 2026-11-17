@@ -30,7 +30,8 @@ function AMP({ onNavigate }: HomeProps) {
 
         return amps
             .flatMap((amp) => getAmpRelations(amp, data).diagnoses
-                .filter((diagnosis) => diagnosis.Nombre
+                .filter((diagnosis) => [diagnosis.Nombre, ...diagnosis.Sintomas]
+                    .join(' ')
                     .toLocaleLowerCase('es')
                     .normalize('NFD')
                     .replace(/[\u0300-\u036f]/g, '')
@@ -53,9 +54,10 @@ function AMP({ onNavigate }: HomeProps) {
 
     const clearFilters = () => {
         setAmpSearch('')
+        setDiagnosisSearch('')
     }
 
-    const hasActiveFilters = Boolean(ampSearch)
+    const hasActiveFilters = Boolean(ampSearch || diagnosisSearch.trim())
 
     return (
         <section className="page-width glossary-page">
