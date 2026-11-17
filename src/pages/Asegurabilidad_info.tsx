@@ -336,7 +336,7 @@ function Asegurabilidad_info({ onNavigate }: HomeProps) {
               </p>
             </div>
           ) : viewServices ? (
-            <div className="checkups-grid">
+            <div className="checkups-grid checkups-list">
               {filteredServices.map((service) => {
                 const _service = data.Servicios.find((item) => item.id === service.f_id)
                 const _hasDocs = Boolean(_service?.Docs.length)
@@ -348,7 +348,7 @@ function Asegurabilidad_info({ onNavigate }: HomeProps) {
                   >
                     <div className="checkup-card__main">
                       <div>
-                        <p className="checkup-card__sku">Servicio individual</p>
+                        <p className="checkup-card__sku">{_service?.SKU}</p>
                         <h2>{_hasDocs ? service.Nombre.concat("↗") : service.Nombre}</h2>
                       </div>
                     </div>
@@ -361,7 +361,7 @@ function Asegurabilidad_info({ onNavigate }: HomeProps) {
               })}
             </div>
           ) : (
-            <div className="checkups-grid">
+            <div className="checkups-grid checkups-list">
               {filteredPaquetes.map((paquete, index) => {
                 return (
                   <article

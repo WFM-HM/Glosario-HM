@@ -127,12 +127,16 @@ function CheckupModal({ checkup, data, isOpen, onClose }: CheckupModalProps) {
               </div>
             )}
 
-            {checkup['Notas importantes'] && (
-              <div className="checkup-modal__section checkup-modal__notes">
+            {checkup.Notas.length > 0 &&
+              <div className="checkup-modal__section">
                 <h3>Notas importantes</h3>
-                <p>{checkup['Notas importantes']}</p>
+                <ul className="checkup-locations">
+                  {checkup.Notas.map((nota, index) => (
+                    <li key={index}>{nota.Contenido}</li>
+                  ))}
+                </ul>
               </div>
-            )}
+            }
           </div>
         )}
       </Modal>

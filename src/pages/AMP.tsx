@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { useData } from '../context/DataContext'
 import type { AMP as AmpType, Page } from '../data/types'
 import {
-    deduplicateAmps,
     filterAmps,
     getAmpRelations
 } from '../amps/catalog'
@@ -18,7 +17,7 @@ function AMP({ onNavigate }: HomeProps) {
     const { decryptedData } = useData()
     const data = decryptedData ?? emptyData
 
-    const amps = useMemo(() => deduplicateAmps(data.AMPs), [data.AMPs])
+    const amps = useMemo(() => data.AMPs, [data.AMPs])
     const filteredAmps = useMemo(
         () => filterAmps(amps, { search: ampSearch }).sort((left, right) =>
             left.Nombre.localeCompare(right.Nombre, 'es', { sensitivity: 'base' })),
@@ -151,7 +150,7 @@ function AMP({ onNavigate }: HomeProps) {
                             <p>Intenta modificar los filtros o realizar otra búsqueda.</p>
                         </div>
                     ) : (
-                        <div className="checkups-grid">
+                        <div className="checkups-grid checkups-list">
                             {filteredAmps.map((amp, index) => {
                                 const { diagnoses } = getAmpRelations(amp, data)
 
@@ -168,11 +167,9 @@ function AMP({ onNavigate }: HomeProps) {
                                             </div>
                                         </div>
                                         <div className="checkup-card__meta">
-                                            {amp.Diagnosticos.length > 1 ? (
-                                                <span>
-                                                    {diagnoses.length} {diagnoses.length === 1 ? 'diagnóstico' : 'diagnósticos'}
-                                                </span>
-                                            ) : (<span>{amp.Diagnosticos.at(0)?.Nombre}</span>)}
+                                            <span>
+                                                {diagnoses.length} {diagnoses.length === 1 ? 'diagnóstico' : 'diagnósticos'}
+                                            </span>
                                         </div>
                                         <div className="checkup-card__action">
                                             Ver información <span aria-hidden="true">→</span>

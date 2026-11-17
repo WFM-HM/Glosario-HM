@@ -87,7 +87,7 @@ function Preempleo({ onNavigate }: HomeProps) {
                             <p>Intenta modificar los filtros o realizar otra búsqueda.</p>
                         </div>
                     ) : (
-                        <div className="checkups-grid">
+                        <div className="checkups-grid checkups-list">
                             {filteredPreempleos.map((preempleo, index) => {
 
                                 return (

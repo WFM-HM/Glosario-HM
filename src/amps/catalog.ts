@@ -1,4 +1,4 @@
-import type { AMP, CatalogItem, Data } from '../data/types'
+import type { AMP, CatalogItem, Data, Diagnostico } from '../data/types'
 
 export type AmpFilters = {
   search: string
@@ -8,18 +8,6 @@ export function sortCatalog(items: CatalogItem[]) {
   return [...items].sort((left, right) =>
     left.Nombre.localeCompare(right.Nombre, 'es', { sensitivity: 'base' })
   )
-}
-
-export function deduplicateAmps(amps: AMP[]) {
-  const seen = new Set<string>()
-
-  return amps.filter((amp) => {
-    const key = JSON.stringify(amp)
-
-    if (seen.has(key)) return false
-    seen.add(key)
-    return true
-  })
 }
 
 export function createCatalogMap(items: CatalogItem[]) {
@@ -49,19 +37,20 @@ export function filterAmps(amps: AMP[], filters: AmpFilters) {
 }
 
 export function getAmpRelations(amp: AMP, data: Data) {
-  const roleLookup = createCatalogMap(data.Roles)
   const categoryLookup = createCatalogMap(data.CategoriasAMP)
   const serviceLookup = createCatalogMap(data.Servicios)
   const locationLookup = buildCatalogLookup(data.Sedes)
+  const diagnosticoLookup = new Map(data.Diagnosticos.map((diag) => [diag.id, diag]))
 
   return {
-    roleNames: resolveCatalogNames(roleLookup, amp.id_roles_vSintomas),
     coverageNames: amp.Notas_cobertura.map((reference) => ({
       name: categoryLookup.get(reference.f_id) ?? reference.Nombre,
       note: reference.Nombre,
     })),
     sedes: resolveCatalogNames(locationLookup, amp.Sedes),
-    diagnoses: amp.Diagnosticos.map((diagnosis) => ({
+    diagnoses: amp.f_diagnosticos.map((diag_id) => diagnosticoLookup.get(diag_id))
+    .filter((diagnosis): diagnosis is Diagnostico => diagnosis !== undefined)
+    .map((diagnosis) => ({
       ...diagnosis,
       coverageGroups: diagnosis.Cobertura.map((coverage) => ({
         categoryName: categoryLookup.get(coverage.cat_f_id) ?? 'Sin categoría',

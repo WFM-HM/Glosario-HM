@@ -26,6 +26,11 @@ export type DocsRepository = {
   URL: string
 }
 
+export type NotaxRol = {
+  Contenido: string,
+  Roles: number[]
+}
+
 export type ExternalLink = {
   id: number,
   Nombre: string,
@@ -70,7 +75,7 @@ export type ChequeoMedico = {
   EdadMax: number | null
   Visible: boolean
   Vencimiento: string
-  'Notas importantes': string
+  Notas: NotaxRol[]
   Sedes: number[]
   SKU: string
 }
@@ -111,21 +116,21 @@ export type ServicioAMP = {
 }
 export type Diagnostico = {
   id: number
-  Sintomas: string[]
+  Codigo: string
   Nombre: string
+  Sintomas: string[]
   Nota: string
   Cobertura: CoberturaAMP[]
 }
 
 export type AMP = {
   id: number
-  id_roles_vSintomas: number[]
   Nombre: string
   Notas: string[]
   Exclusiones: string[]
   Sedes: number[]
   Notas_cobertura: CatalogReference[]
-  Diagnosticos: Diagnostico[]
+  f_diagnosticos: number[]
 }
 
 export type Administracion = {
@@ -133,18 +138,20 @@ export type Administracion = {
   AMP: number[]
   Asegurabilidad: number[]
   Preempleos: number[]
+  SintomasAMP: number[]
 }
 
 export type Data = {
   Poblacion: CatalogItem[]
   Servicios: ServicioItem[]
   Roles: CatalogItem[]
-  Accesos: Administracion 
+  Accesos: Administracion
   Enlaces: ExternalLink[]
   CategoriasAMP: CategoriaAMP[]
   Sedes: CatalogItem[]
   Chequeos_medicos: ChequeoMedico[]
   AMPs: AMP[]
+  Diagnosticos: Diagnostico[]
   Asegurabilidad: Asegurabilidad[]
   Preempleos: Preempleo[]
 }

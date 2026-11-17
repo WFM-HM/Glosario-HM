@@ -25,12 +25,13 @@ export const emptyData: Data = {
   Poblacion: [],
   Servicios: [],
   Roles: [],
-  Accesos: { Chequeos: [], AMP: [], Asegurabilidad: [], Preempleos: [] },
+  Accesos: { Chequeos: [], AMP: [], Asegurabilidad: [], Preempleos: [], SintomasAMP: [] },
   Enlaces: [],
   CategoriasAMP: [],
   Sedes: [],
   Chequeos_medicos: [],
   AMPs: [],
+  Diagnosticos: [],
   Asegurabilidad: [],
   Preempleos: []
 }

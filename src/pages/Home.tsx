@@ -101,12 +101,6 @@ function Home({ onNavigate }: HomeProps) {
           <span>Total de chequeos médicos en el sistema</span>
         </div>
         <div className="hero-index" aria-label="Resumen del glosario">
-          <span className="index-label">Total de tipos de chequeos médicos</span>
-          <strong>{aseguradoras?.size}</strong>
-          <div className="index-rule" />
-          <span>Total de chequeos médicos con nombres/aseguradoras diferentes</span>
-        </div>
-        <div className="hero-index" aria-label="Resumen del glosario">
           <span className="index-label">Total de protocolos AMP</span>
           <strong>{decryptedData?.AMPs.length}</strong>
           <div className="index-rule" />

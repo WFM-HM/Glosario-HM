@@ -87,24 +87,30 @@ function Glossary() {
   const { decryptedData } = useData()
   const data = decryptedData ?? emptyData
 
+  const ageSliderMin = 0
+  const ageSliderMax = 100
+
+  const visibleCheckups = useMemo(
+    () => data.Chequeos_medicos.filter(checkup => checkup.Visible === true),
+    [data.Chequeos_medicos]
+  )
+
   /*
-   * Services sorted alphabetically.
+   * Filter options must only describe checkups that can appear in the list.
    */
-  const sortedUniqueNames = useMemo(() => getUniqueNames(data.Chequeos_medicos), [data.Chequeos_medicos])
+  const sortedUniqueNames = useMemo(
+    () => getUniqueNames(visibleCheckups),
+    [visibleCheckups]
+  )
 
   /*
    * Existing price + currency combinations.
    * There is NO currency conversion.
    */
   const priceOptions = useMemo(
-    () => getPriceOptions(data.Chequeos_medicos),
-    [data.Chequeos_medicos]
+    () => getPriceOptions(visibleCheckups),
+    [visibleCheckups]
   )
-
-  const ageSliderMin = 0
-  const ageSliderMax = 100
-
-  const visibleCheckups = data.Chequeos_medicos.filter(checkup => checkup.Visible === true)
 
   /*
    * Filter checkups.
@@ -173,8 +179,14 @@ function Glossary() {
 
   const rowHeight = useDynamicRowHeight({
     defaultRowHeight: 140,
-    key: filteredCheckups.map(checkup => checkup.SKU || checkup.Nombre).join('|'),
+    key: filteredCheckups
+      .map((checkup, index) => `${checkup.SKU || checkup.Nombre}-${index}`)
+      .join('|'),
   })
+
+  const filteredListKey = filteredCheckups
+    .map((checkup, index) => `${checkup.SKU || checkup.Nombre}-${index}`)
+    .join('|')
 
   const updateAgeMin = (value: number) => {
     setSelectedAgeMin(Math.min(value, ageMax))
@@ -332,7 +344,7 @@ function Glossary() {
               </div>
             </div>
             */}
-            
+
             {/* Precio */}
             <div className="filter-control">
               <label htmlFor="price-filter">
@@ -405,15 +417,17 @@ function Glossary() {
             </div>
           ) : (
             <List
+              key={filteredListKey}
               className="checkups-list"
               defaultHeight={600}
               overscanCount={4}
               rowComponent={CheckupRow}
               rowCount={filteredCheckups.length}
               rowHeight={rowHeight}
-              rowKey={(index) =>
-                filteredCheckups[index].SKU || `checkup-${index}`
-              }
+              rowKey={(index) => {
+                const checkup = filteredCheckups[index]
+                return `${checkup.SKU || checkup.Nombre}-${index}`
+              }}
               rowProps={{
                 checkups: filteredCheckups,
                 data,

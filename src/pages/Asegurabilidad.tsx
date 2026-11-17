@@ -14,7 +14,7 @@ function Asegurabilidad({ onNavigate }: HomeProps) {
     const [search, setSearch] = useState('')
     const { decryptedData } = useData()
     const data = decryptedData ?? emptyData
-    
+
     const Asegurabilidades = useMemo(() => data.Asegurabilidad, [data.Asegurabilidad])
     const filteredAsegurabilidades = useMemo(
         () => filterAsegurabilidades(Asegurabilidades, { search }).sort((left, right) =>
@@ -84,7 +84,7 @@ function Asegurabilidad({ onNavigate }: HomeProps) {
                             <p>Intenta modificar los filtros o realizar otra búsqueda.</p>
                         </div>
                     ) : (
-                        <div className="checkups-grid">
+                        <div className="checkups-grid checkups-list">
                             {filteredAsegurabilidades.map((Asegurabilidad, index) => {
 
                                 return (
@@ -103,7 +103,10 @@ function Asegurabilidad({ onNavigate }: HomeProps) {
                                             </div>
                                         </div>
                                         <div className="checkup-card__meta">
-                                            <span>{Asegurabilidad.Paquetes.length} {Asegurabilidad.Paquetes.length === 1 ? 'paquete' : 'paquetes'}</span>
+                                            <div className="checkup-card__meta">
+                                                <span>{Asegurabilidad.Servicios.length} servicios</span>
+                                                <span>{Asegurabilidad.Paquetes.length} paquetes</span>
+                                            </div>
                                         </div>
                                         <div className="checkup-card__action">
                                             Ver información <span aria-hidden="true">→</span>

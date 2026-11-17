@@ -196,6 +196,9 @@ function AMP_info({ onNavigate }: HomeProps) {
                                             >
                                                 <div className="checkup-card__main">
                                                     <div>
+                                                        <p className="checkup-card__sku">
+                                                            {diagnosis.Codigo}
+                                                        </p>
                                                         <h2>{diagnosis.Nombre}</h2>
                                                     </div>
                                                 </div>

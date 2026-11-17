@@ -1,5 +1,5 @@
-import type { AMP, CatalogReference, CoberturaAMP, Data } from './types'
-import {emptyData, parseDate} from "../shared_utils"
+import type { AMP, CatalogReference, ChequeoMedico, CoberturaAMP, Data, Diagnostico } from './types'
+import { emptyData, parseDate } from "../shared_utils"
 
 function filterVisibleReferences(
   references: CatalogReference[],
@@ -18,7 +18,7 @@ function filterVisibleCoverages(
 function generalFilter(
   data: Data,
   role: number
-){
+) {
   return {
     ...data,
     Chequeos_medicos: data.Accesos.Chequeos.includes(role) ? data.Chequeos_medicos : [],
@@ -28,21 +28,64 @@ function generalFilter(
   }
 }
 
+function filterCheckupNotesByRole(
+  chequeo: ChequeoMedico,
+  roleId: number,
+) {
+  return {
+    ...chequeo,
+    Notas: chequeo.Notas.filter((nota) => nota.Roles.includes(roleId))
+  }
+}
+
+function filterCheckupsByRole(
+  checkups: ChequeoMedico[],
+  roleId: number,
+  today: Date,
+) {
+  const parsedDates = new Map<string, Date | null>()
+  const visibleCheckups: ChequeoMedico[] = []
+
+  for (const chequeo of checkups) {
+    let expirationDate: Date | null = null
+
+    if (chequeo.Vencimiento) {
+      if (!parsedDates.has(chequeo.Vencimiento)) {
+        parsedDates.set(chequeo.Vencimiento, parseDate(chequeo.Vencimiento))
+      }
+
+      expirationDate = parsedDates.get(chequeo.Vencimiento) ?? null
+    }
+
+    if (expirationDate !== null && expirationDate < today) continue
+
+    visibleCheckups.push(filterCheckupNotesByRole(chequeo, roleId))
+  }
+
+  return visibleCheckups
+}
+
+function filterDiagnosticoDataByRole(
+  diagnostico: Diagnostico,
+  roleId: number,
+  visibleCategoryIds: Set<number>,
+  visibleSymptomsIds: number[]
+) {
+  const canSeeSymptoms = visibleSymptomsIds.includes(roleId)
+  return {
+    ...diagnostico,
+    Sintomas: canSeeSymptoms ? [...diagnostico.Sintomas] : [],
+    Cobertura: filterVisibleCoverages(diagnostico.Cobertura, visibleCategoryIds)
+  }
+}
+
 function filterAmpByRole(
   amp: AMP,
-  roleId: number,
-  visibleCategoryIds: Set<number>
+  visibleCategoryIds: Set<number>,
 ) {
-  const canSeeSymptoms = amp.id_roles_vSintomas.includes(roleId)
-
   return {
     ...amp,
     Notas_cobertura: filterVisibleReferences(amp.Notas_cobertura, visibleCategoryIds),
-    Diagnosticos: amp.Diagnosticos.map((diagnostico) => ({
-      ...diagnostico,
-      Sintomas: canSeeSymptoms ? [...diagnostico.Sintomas] : [],
-      Cobertura: filterVisibleCoverages(diagnostico.Cobertura, visibleCategoryIds),
-    })),
   }
 }
 
@@ -61,17 +104,15 @@ export function filterDataByRole(data: Data, roleName: string): Data {
   )
   const today = new Date()
   today.setHours(0, 0, 0, 0)
+
   return {
     ...data,
-    Chequeos_medicos: data.Chequeos_medicos.filter((chequeo) => {
-      const expirationDate = chequeo.Vencimiento
-        ? parseDate(chequeo.Vencimiento)
-        : null
-
-      return expirationDate === null || expirationDate >= today
-    }),
+    Chequeos_medicos: filterCheckupsByRole(data.Chequeos_medicos, role.id, today),
     AMPs: data.AMPs.map((amp) =>
-      filterAmpByRole(amp, role.id, visibleCategoryIds)
+      filterAmpByRole(amp, visibleCategoryIds)
+    ),
+    Diagnosticos: data.Diagnosticos.map((diag) =>
+      filterDiagnosticoDataByRole(diag, role.id, visibleCategoryIds, data.Accesos.SintomasAMP)
     ),
     Enlaces: data.Enlaces.filter(
       (link) => link.Visibilidad.includes(role.id)
